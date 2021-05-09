@@ -2,8 +2,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
@@ -14,3 +13,29 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.full-view {
+  width: 100%;
+  height: 99.9vh;
+}
+
+.input-spacing {
+  margin-bottom: 5%;
+}
+
+.register-clue {
+  margin-top: 20px;
+  font-size: 0.8rem;
+  text-decoration: underline;
+  color: grey;
+  cursor: pointer;
+}
+
+.input-label {
+  display: block;
+  font-size: 1.2rem;
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+/*# sourceMappingURL=globals.css.map */
