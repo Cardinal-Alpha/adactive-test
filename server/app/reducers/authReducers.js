@@ -6,7 +6,7 @@ import {SET_LOGIN,
         LOGOUT
 } from "../actionTypes"
 
-import {getDefaultApp} from "../firebase/FireApp"
+import {getDefaultAuth} from "../firebase/FireApp"
 
 
 const initAuth = {
@@ -23,8 +23,6 @@ const initAuth = {
 
 
 const authReducers = (state = initAuth, action)=>{
-    
-    const auth = getDefaultApp().auth();
 
     switch (action.type) {
 
@@ -36,12 +34,16 @@ const authReducers = (state = initAuth, action)=>{
         }
         
         case DO_LOGIN:{
-            auth.signInWithEmailAndPassword(
-                state.login.email,
-                state.login.password
+            getDefaultAuth()
+            .then(
+                auth =>
+                    auth.signInWithEmailAndPassword(
+                        state.login.email,
+                        state.login.password
+                    )
+                    .then( creds=> action.payload.onSuccess(creds))
+                    .catch( err=> action.payload.onFailed(err))
             )
-            .then( creds=> action.payload.onSuccess(creds))
-            .catch( err=> action.payload.onFailed(err))
             return {
                 ...state,
                 login:{
@@ -59,16 +61,20 @@ const authReducers = (state = initAuth, action)=>{
         }
         
         case DO_REGISTRATION:{
-            auth.createUserWithEmailAndPassword(
-                state.registration.email,
-                state.registration.password
+            getDefaultAuth()
+            .then(
+                auth =>
+                    auth.createUserWithEmailAndPassword(
+                        state.registration.email,
+                        state.registration.password
+                    )
+                    .then( creds=>{
+                        const displayName = state.registration.displayName
+                        creds.user.updateProfile({displayName})
+                        .then( ()=> action.payload.onSuccess(creds));
+                    })
+                    .catch( err=> action.payload.onFailed(err))
             )
-            .then( creds=>{
-                const displayName = state.registration.displayName
-                creds.user.updateProfile({displayName})
-                .then( ()=> action.payload.onSuccess(creds));
-            })
-            .catch( err=> action.payload.onFailed(err))
             return {
                 ...state,
                 registration:{
@@ -80,9 +86,13 @@ const authReducers = (state = initAuth, action)=>{
         }
 
         case LOGOUT: {
-            auth.signOut()
-            .then( ()=> action.payload.onSuccess() )
-            .catch( err=> action.payload.onFailed(err) )
+            getDefaultAuth()
+            .then(
+                auth =>
+                    auth.signOut()
+                    .then( ()=> action.payload.onSuccess() )
+                    .catch( err=> action.payload.onFailed(err) )
+            )
             return {
                 ...state,
                 ...initAuth

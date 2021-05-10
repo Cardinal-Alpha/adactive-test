@@ -20,8 +20,14 @@ const LoginCard = (props)=>{
     const login = props.login;
     const history = useHistory();
 
-    const loginAction = ()=>{
+    const loginAction = e=>{
+        e.preventDefault();
         const onFailed = (err)=>{
+            const loginCopy = login;
+            props.setLogin(
+                loginCopy.email,
+                loginCopy.password
+            )
             toast.current.show({
                 severity: "error",
                 summary: "Login Failed",
@@ -42,24 +48,26 @@ const LoginCard = (props)=>{
     }
     
     return <Card className={props.className}>
-                <div className='p-d-flex p-flex-column p-jc-center p-ai-center'>
-                    <span className='p-input-icon-right input-spacing'>
-                        <i className='pi pi-envelope'/>
-                        <InputText value={login.email}
-                                    placeholder='Email'
-                                    onChange={ e=> props.setLogin(e.target.value, login.password) }/>
-                    </span>
-                    <Password value={login.password}
-                                placeholder='Password'
-                                feedback={Boolean(0)}
-                                onChange={e=> props.setLogin(login.email, e.target.value)}
-                                toggleMask
-                                className='input-spacing'/>
-                    <Button label='Login' onClick={loginAction}/>
-                    <div className='register-clue' onClick={registerAction}>
-                        Not yet registered? Register here.
+                <form onSubmit={loginAction}>
+                    <div className='p-d-flex p-flex-column p-jc-center p-ai-center'>
+                        <span className='p-input-icon-right input-spacing'>
+                            <i className='pi pi-envelope'/>
+                            <InputText value={login.email}
+                                        placeholder='Email'
+                                        onChange={ e=> props.setLogin(e.target.value, login.password) }/>
+                        </span>
+                        <Password value={login.password}
+                                    placeholder='Password'
+                                    feedback={Boolean(0)}
+                                    onChange={e=> props.setLogin(login.email, e.target.value)}
+                                    toggleMask
+                                    className='input-spacing'/>
+                        <Button label='Login' type='submit'/>
+                        <div className='register-clue' onClick={registerAction}>
+                            Not yet registered? Register here.
+                        </div>
                     </div>
-                </div>
+                </form>
                 <Toast ref={toast} />
         </Card>
 }

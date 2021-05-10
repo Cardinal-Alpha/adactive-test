@@ -9,6 +9,7 @@ import {AuthStore} from "./store"
 import {Provider} from "react-redux"
 
 import FullViewContainer from "./component/FullViewContainer";
+import DashboardContainer from "./component/DashboardContainer";
 import LoginCard from './component/LoginCard';
 import RegisterCard from './component/RegisterCard';
 import HelloCard  from './component/HelloCard';
@@ -37,12 +38,14 @@ const App = (props)=>{
                             </FullViewContainer>
                         </Route>
                         <Route exact path='/dashboard'>
-                            <FullViewContainer>
+                            <DashboardContainer>
                                 <HomeContent />
-                            </FullViewContainer>
+                            </DashboardContainer>
                         </Route>
                         <Route path="*">
-                            <h2>Oops.. not found</h2>
+                            <DashboardContainer>
+                                <h2>Oops.. not found</h2>
+                            </DashboardContainer>
                         </Route>
                         </Switch>
                     </Router>
