@@ -17,8 +17,10 @@ const DashboardContainer = (props)=>{
     getDefaultAuth()
     .then(
         auth =>{
-            if(!auth.currentUser)
-                history.push('/');
+            auth.onIdTokenChanged( user=>{
+                if(!user)
+                    history.push('/');
+            });
         }
     )
 

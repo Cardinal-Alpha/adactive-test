@@ -9,7 +9,8 @@ import {Button} from "primereact/button";
 import {Toast} from "primereact/toast";
 
 import {setLogin, doLogin} from "../action/authActions";
-import {AuthContext} from '../context'
+import {AuthContext} from '../context';
+import {getDefaultAuth} from '../firebase/FireApp';
 
 
 const mapLoginToProps = state=> ({login: state.login});
@@ -19,6 +20,16 @@ const LoginCard = (props)=>{
     const toast = useRef(null);
     const login = props.login;
     const history = useHistory();
+
+    getDefaultAuth()
+    .then(
+        auth =>{
+            auth.onIdTokenChanged( user=>{
+                if(user)
+                    history.push('/dashboard');
+            });
+        }
+    )
 
     const loginAction = e=>{
         e.preventDefault();

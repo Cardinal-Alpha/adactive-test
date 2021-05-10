@@ -2,7 +2,7 @@ import {useHistory} from 'react-router-dom'
 
 
 export const menu = {
-    logo: 'shopping-cart-logo.png',
+    logo: '/shopping-cart-logo.png',
     model:[
         {
             label: 'Home',
