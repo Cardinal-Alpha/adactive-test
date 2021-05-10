@@ -13,7 +13,12 @@ import DashboardContainer from "./component/DashboardContainer";
 import LoginCard from './component/LoginCard';
 import RegisterCard from './component/RegisterCard';
 import HelloCard  from './component/HelloCard';
-import HomeContent from './component/HomeContent';
+
+import HomeContent from './component/content/HomeContent';
+import ProfileContent from './component/content/ProfileContent';
+import StorageContent from './component/content/StorageContent';
+import CheckInContent from './component/content/CheckInContent';
+import CheckOutContent from './component/content/CheckOutContent';
 
 const App = (props)=>{
 
@@ -40,6 +45,26 @@ const App = (props)=>{
                         <Route exact path='/dashboard'>
                             <DashboardContainer>
                                 <HomeContent />
+                            </DashboardContainer>
+                        </Route>
+                        <Route exact path='/profile'>
+                            <DashboardContainer>
+                                <ProfileContent />
+                            </DashboardContainer>
+                        </Route>
+                        <Route exact path='/inventory/storage'>
+                            <DashboardContainer>
+                                <StorageContent />
+                            </DashboardContainer>
+                        </Route>
+                        <Route exact path='/inventory/checkin'>
+                            <DashboardContainer>
+                                <CheckInContent />
+                            </DashboardContainer>
+                        </Route>
+                        <Route exact path='/inventory/checkout'>
+                            <DashboardContainer>
+                                <CheckOutContent />
                             </DashboardContainer>
                         </Route>
                         <Route path="*">

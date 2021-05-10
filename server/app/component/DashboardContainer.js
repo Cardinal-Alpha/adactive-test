@@ -34,6 +34,20 @@ const DashboardContainer = (props)=>{
             life: 3000
         });
     }
+
+    const urlToCommand = level=>{
+        const url = level.url;
+        delete level.url;
+        level.command = e=>{
+            history.push(url);
+        }
+        if(level.items)
+            level.items = level.items.maps(urlToCommand)
+        return level;
+    }
+
+    menu.model = urlToCommand(menu.model);
+
         
     const imgLogo = <img src={menu.logo} style={{width: "35px", margin: "0px 10px"}} />;
 
