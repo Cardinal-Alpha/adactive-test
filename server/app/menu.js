@@ -25,7 +25,7 @@ export const menu = {
         },
         {
             label: 'Profile',
-            url: '/dashboard'
+            url: '/profile'
         }
     ]
 }

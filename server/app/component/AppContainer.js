@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {connect} from 'react-redux';
 import {Link, useHistory} from "react-router-dom";
 
@@ -19,6 +19,7 @@ const mapAuthStateToProps = state=>({
 const AppContainer = (props)=>{
 
     const history = useHistory();
+    const [loading, setLoading] = useState(true);
 
     getDefaultAuth()
     .then(
@@ -34,6 +35,7 @@ const AppContainer = (props)=>{
                         history.push('/dashboard');
                     props.setAuthorized(true);
                 }
+                setTimeout( ()=> setLoading(false), 1000);
             });
         }
     )
@@ -51,49 +53,59 @@ const AppContainer = (props)=>{
         });
     }
 
-    const urlToCommand = level=>{
+    const urlToTemplate = level=>{
         level.template = (item, options) => {
             return (
                 /* custom element */
-                <Link className={options.className} to={item.url}>
-                    <span className={options.iconClassName}></span>;
-                    <span className={options.labelClassName}>{item.label}</span>;
+                <Link className={options.className} to={item.url} onClick={options.onClick}>
+                    <span className={options.iconClassName}></span>
+                    <span className={options.labelClassName}>{item.label}</span>
                 </Link>
             );
         }
         if(level.items)
-            level.items = level.items.maps(urlToCommand)
+            level.items = level.items.map(urlToTemplate)
         return level;
     }
 
-    menu.model = urlToCommand(menu.model);
-
+    menu.model = menu.model.map(urlToTemplate);
         
     const imgLogo = <img src={menu.logo} style={{width: "35px", margin: "0px 10px"}} />;
 
     const logoutButton = <Button label='Logout' onClick={ e=> props.doLogout(onSuccessLogout, onFailedLogout) }
                                 style={{margin: "0px 10px"}}/>;
     
-    if(props.isAuthorized){
-        return <div className="full-view">
-                    <Menubar style={{width: "100%"}} 
-                                model={menu.model} 
-                                start={imgLogo} 
-                                end={logoutButton} />
-                    <div style={{padding: "2vw", height: "100%"}}>
-                        <div style={{height: "100%", width: "100%"}} >
+    if(!loading){
+        if(props.isAuthorized){
+            return <div className="full-view">
+                        <Menubar style={{width: "100%"}} 
+                                    model={menu.model} 
+                                    start={imgLogo} 
+                                    end={logoutButton} />
+                        <div style={{padding: "2vw", height: "100%"}}>
+                            <div style={{height: "100%", width: "100%"}} >
+                                {props.children}
+                            </div>
+                        </div>
+                    </div>
+        }else{
+            return <div>
+                    <div className="full-view p-d-flex p-ai-center p-jc-center">
+                        <div>
                             {props.children}
                         </div>
                     </div>
                 </div>
+        }
     }else{
         return <div>
-                <div className="full-view p-d-flex p-ai-center p-jc-center">
-                    <div>
-                        {props.children}
+                    <div className="full-view p-d-flex p-flex-column p-ai-center p-jc-center">
+                        <div>
+                            <span className="pi pi-spin pi-spinner" style={{fontSize: '10vw'}}></span>
+                            <h1>Loading</h1>
+                        </div>
                     </div>
                 </div>
-            </div>
     }
 }
 
