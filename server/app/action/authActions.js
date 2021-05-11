@@ -3,10 +3,10 @@ import {SET_LOGIN,
     SET_REGISTRATION,
     DO_LOGIN,
     DO_REGISTRATION,
-    LOGOUT,
+    DO_LOGOUT,
     VERIFY_EMAIL_CODE,
     SEND_EMAIL_VERIFICATION,
-    PRE_AUTH
+    SET_AUTHORIZED
 } from "../actionTypes"
 
 
@@ -62,7 +62,7 @@ export const verifyEmailCode = (code, onSuccess, onFailed)=> ({
 })
 
 export const doLogout = (onSuccess, onFailed)=> ({
-    type: LOGOUT,
+    type: DO_LOGOUT,
     payload: {
         onSuccess,
         onFailed
@@ -70,7 +70,7 @@ export const doLogout = (onSuccess, onFailed)=> ({
 })
 
 
-export const preAuth = ()=>({
-    type: PRE_AUTH,
-    payload: {}
+export const setAuthorized = isAuthorized=>({
+    type: SET_AUTHORIZED,
+    payload: isAuthorized
 })

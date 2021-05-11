@@ -10,7 +10,6 @@ import {Toast} from "primereact/toast";
 
 import {setLogin, doLogin} from "../action/authActions";
 import {AuthContext} from '../context';
-import {getDefaultAuth} from '../firebase/FireApp';
 
 
 const mapLoginToProps = state=> ({login: state.login});
@@ -21,30 +20,20 @@ const LoginCard = (props)=>{
     const login = props.login;
     const history = useHistory();
 
-    getDefaultAuth()
-    .then(
-        auth =>{
-            auth.onIdTokenChanged( user=>{
-                if(user)
-                    history.push('/dashboard');
-            });
-        }
-    )
-
     const loginAction = e=>{
         e.preventDefault();
         const onFailed = (err)=>{
             const loginCopy = login;
-            props.setLogin(
-                loginCopy.email,
-                loginCopy.password
-            )
             toast.current.show({
                 severity: "error",
                 summary: "Login Failed",
                 detail: `${err.message}`,
                 life: 3000
             });
+            props.setLogin(
+                loginCopy.email,
+                loginCopy.password
+            )
         }
     
         const onSuccess = ()=>{
@@ -77,9 +66,9 @@ const LoginCard = (props)=>{
                         <div className='register-clue' onClick={registerAction}>
                             Not yet registered? Register here.
                         </div>
+                        <Toast ref={toast} />
                     </div>
                 </form>
-                <Toast ref={toast} />
         </Card>
 }
 

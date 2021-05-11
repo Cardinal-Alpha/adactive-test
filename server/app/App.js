@@ -8,8 +8,7 @@ import {AuthContext} from "./context"
 import {AuthStore} from "./store"
 import {Provider} from "react-redux"
 
-import FullViewContainer from "./component/FullViewContainer";
-import DashboardContainer from "./component/DashboardContainer";
+import AppContainer from "./component/AppContainer";
 import LoginCard from './component/LoginCard';
 import RegisterCard from './component/RegisterCard';
 import HelloCard  from './component/HelloCard';
@@ -20,59 +19,45 @@ import StorageContent from './component/content/StorageContent';
 import CheckInContent from './component/content/CheckInContent';
 import CheckOutContent from './component/content/CheckOutContent';
 
+
+
 const App = (props)=>{
 
     if(typeof window != 'undefined'){
 
         return <Provider store={AuthStore} context={AuthContext}>
                     <Router>
-                        <Switch>
-                        <Route exact path="/">
-                            <FullViewContainer>
-                                <LoginCard />
-                            </FullViewContainer>
-                        </Route>
-                        <Route exact path='/register/hello'>
-                            <FullViewContainer>
-                                <HelloCard />
-                            </FullViewContainer>
-                        </Route>
-                        <Route exact path='/register'>
-                            <FullViewContainer>
-                                <RegisterCard />
-                            </FullViewContainer>
-                        </Route>
-                        <Route exact path='/dashboard'>
-                            <DashboardContainer>
-                                <HomeContent />
-                            </DashboardContainer>
-                        </Route>
-                        <Route exact path='/profile'>
-                            <DashboardContainer>
-                                <ProfileContent />
-                            </DashboardContainer>
-                        </Route>
-                        <Route exact path='/inventory/storage'>
-                            <DashboardContainer>
-                                <StorageContent />
-                            </DashboardContainer>
-                        </Route>
-                        <Route exact path='/inventory/checkin'>
-                            <DashboardContainer>
-                                <CheckInContent />
-                            </DashboardContainer>
-                        </Route>
-                        <Route exact path='/inventory/checkout'>
-                            <DashboardContainer>
-                                <CheckOutContent />
-                            </DashboardContainer>
-                        </Route>
-                        <Route path="*">
-                            <DashboardContainer>
-                                <h2>Oops.. not found</h2>
-                            </DashboardContainer>
-                        </Route>
-                        </Switch>
+                        <AppContainer >
+                            <Switch>
+                                <Route exact path="/">
+                                    <LoginCard />
+                                </Route>
+                                <Route exact path='/register/hello'>
+                                    <HelloCard />
+                                </Route>
+                                <Route exact path='/register'>
+                                    <RegisterCard />
+                                </Route>
+                                <Route exact path='/dashboard'>
+                                    <HomeContent />
+                                </Route>
+                                <Route exact path='/profile'>
+                                    <ProfileContent />
+                                </Route>
+                                <Route exact path='/inventory/storage'>
+                                    <StorageContent />
+                                </Route>
+                                <Route exact path='/inventory/checkin'>
+                                    <CheckInContent />
+                                </Route>
+                                <Route exact path='/inventory/checkout'>
+                                    <CheckOutContent />
+                                </Route>
+                                <Route path="*">
+                                    <h2>Oops.. not found</h2>
+                                </Route>
+                            </Switch>
+                        </AppContainer>
                     </Router>
                 </Provider>
     }else{

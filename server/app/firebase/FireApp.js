@@ -23,7 +23,7 @@ export const getDefaultAuth = ()=>{
                 .then( ()=> resolve(auth) )
                 .catch( err=> reject(err))
             }else{
-                resolve(auth);
+                resolve(null);
             }
         }
     )

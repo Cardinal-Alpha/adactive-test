@@ -3,13 +3,15 @@ import {SET_LOGIN,
         SET_REGISTRATION,
         DO_LOGIN,
         DO_REGISTRATION,
-        LOGOUT
+        DO_LOGOUT,
+        SET_AUTHORIZED
 } from "../actionTypes"
 
 import {getDefaultAuth} from "../firebase/FireApp"
 
 
 const initAuth = {
+    isAuthorized: false,
     login:{
         email: "",
         password: ""
@@ -85,7 +87,7 @@ const authReducers = (state = initAuth, action)=>{
             }
         }
 
-        case LOGOUT: {
+        case DO_LOGOUT: {
             getDefaultAuth()
             .then(
                 auth =>
@@ -98,6 +100,12 @@ const authReducers = (state = initAuth, action)=>{
                 ...initAuth
             };
         }
+
+        case SET_AUTHORIZED:
+            return {
+                ...state,
+                isAuthorized: action.payload
+            }
 
         default:
             return {
