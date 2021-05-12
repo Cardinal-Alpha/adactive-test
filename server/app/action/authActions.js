@@ -19,6 +19,7 @@ export const setLogin = (email, password)=> ({
     }
 })
 
+
 export const doLogin = (onSuccess, onFailed)=> ({
     type: DO_LOGIN,
     payload: {
@@ -26,6 +27,7 @@ export const doLogin = (onSuccess, onFailed)=> ({
         onFailed
     }
 })
+
 
 export const setRegistration = (displayName, email, password)=> ({
     type: SET_REGISTRATION,
@@ -36,6 +38,7 @@ export const setRegistration = (displayName, email, password)=> ({
     }
 })
 
+
 export const doRegistration = (onSuccess, onFailed)=> ({
     type: DO_REGISTRATION,
     payload: {
@@ -43,6 +46,7 @@ export const doRegistration = (onSuccess, onFailed)=> ({
         onFailed
     }
 })
+
 
 export const sendVerificationEmail = (onSuccess, onFailed)=> ({
     type: SEND_EMAIL_VERIFICATION,
@@ -52,6 +56,7 @@ export const sendVerificationEmail = (onSuccess, onFailed)=> ({
     }
 })
 
+
 export const verifyEmailCode = (code, onSuccess, onFailed)=> ({
     type: VERIFY_EMAIL_CODE,
     payload: {
@@ -60,6 +65,7 @@ export const verifyEmailCode = (code, onSuccess, onFailed)=> ({
         onFailed
     }
 })
+
 
 export const doLogout = (onSuccess, onFailed)=> ({
     type: DO_LOGOUT,

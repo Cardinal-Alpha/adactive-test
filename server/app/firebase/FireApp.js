@@ -28,3 +28,8 @@ export const getDefaultAuth = ()=>{
         }
     )
 }
+
+
+export const getDefaultFirestore = ()=>{
+    return getDefaultApp().firestore();
+}

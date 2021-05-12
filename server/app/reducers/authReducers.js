@@ -28,14 +28,13 @@ const authReducers = (state = initAuth, action)=>{
 
     switch (action.type) {
 
-        case SET_LOGIN:{
+        case SET_LOGIN:
             return {
                 ...state,
                 login: action.payload
             }
-        }
         
-        case DO_LOGIN:{
+        case DO_LOGIN:
             getDefaultAuth()
             .then(
                 auth =>
@@ -53,16 +52,14 @@ const authReducers = (state = initAuth, action)=>{
                     password: ""
                 }
             }
-        }
 
-        case SET_REGISTRATION:{
+        case SET_REGISTRATION:
             return {
                 ...state,
                 registration: action.payload
             }
-        }
         
-        case DO_REGISTRATION:{
+        case DO_REGISTRATION:
             getDefaultAuth()
             .then(
                 auth =>
@@ -85,9 +82,8 @@ const authReducers = (state = initAuth, action)=>{
                     password: ""
                 }
             }
-        }
 
-        case DO_LOGOUT: {
+        case DO_LOGOUT:
             getDefaultAuth()
             .then(
                 auth =>
@@ -99,7 +95,6 @@ const authReducers = (state = initAuth, action)=>{
                 ...state,
                 ...initAuth
             };
-        }
 
         case SET_AUTHORIZED:
             return {
@@ -108,10 +103,7 @@ const authReducers = (state = initAuth, action)=>{
             }
 
         default:
-            return {
-                ...state,
-                ...initAuth
-            };
+            return null;
     }
 }
 
