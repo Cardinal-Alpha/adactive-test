@@ -145,15 +145,23 @@ const StorageContent = (props)=>{
             props.fetch();
         }
         return ()=>{
-            confirmDialog({
-                message: `Are you sure want to delete ${row.name}?`,
-                header: "Item Removal",
-                icon: 'pi pi-exclamation-triangle',
-                accept: ()=> {
-                    setLoading(true);
-                    props.removeItem(row.name, onSuccess, onError);
-                }
-            })
+            if(row.qty == 0){
+                confirmDialog({
+                    message: `Are you sure want to delete ${row.name}?`,
+                    header: "Item Removal",
+                    icon: 'pi pi-exclamation-triangle',
+                    accept: ()=> {
+                        setLoading(true);
+                        props.removeItem(row.name, onSuccess, onError);
+                    }
+                })
+            }else{
+                notif.current.show({
+                    severity: "warn",
+                    summary: "Warning",
+                    detail: "Removal of non empty stock is forbidden"
+                })
+            }
         }
     }
 
