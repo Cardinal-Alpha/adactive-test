@@ -11,11 +11,11 @@ import {getDefaultFirestore} from "../../firebase/FireApp"
 
 export const catalogReducer = (state = {}, action)=> {
     const db = getDefaultFirestore();
-    const onSuccess = action.payload.onSuccess;
-    const onFailed = action.payload.onFailed;
+    const onSuccess = action.payload? action.payload.onSuccess : null;
+    const onFailed = action.payload? action.payload.onFailed : null;
+    const name = action.payload? action.payload.name : null;
     switch (action.type) {
         case ADD_STORAGE_ITEM:
-            const name = action.payload.name;
             const price = action.payload.price;
             db.collection('storage').add({
                 name,
@@ -34,7 +34,6 @@ export const catalogReducer = (state = {}, action)=> {
             break;
     
         case REMOVE_STORAGE_ITEM:
-            const name = action.payload.name;
             db.collection('storage').where("name", "==", name)
             .get()
             .then( docs=> {

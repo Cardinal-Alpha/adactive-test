@@ -103,7 +103,7 @@ const authReducers = (state = initAuth, action)=>{
             }
 
         default:
-            return null;
+            return state;
     }
 }
 

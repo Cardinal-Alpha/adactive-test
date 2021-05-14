@@ -19,6 +19,83 @@ a {
   height: 99.9vh;
 }
 
+td {
+  word-wrap: break-word;
+}
+
+.responsive-table .m-data-descriptor {
+  display: none;
+  font-weight: bold;
+  background-color: #dedede;
+}
+
+.responsive-table td:last-child > *:first-child {
+  margin-bottom: 15px;
+}
+
+.responsive-table .table-header {
+  background: #f8f9fa;
+  color: #495057;
+  padding: 1vw;
+  display: flex;
+  justify-content: right;
+}
+
+.responsive-table tr:hover {
+  background-color: #eeeeee;
+}
+
+.responsive-table table {
+  padding: 0;
+}
+
+@media only screen and (max-width: 768px) {
+  .responsive-table td,
+.responsive-table tr,
+.responsive-table thead,
+.responsive-table tbody,
+.responsive-table table {
+    display: block;
+  }
+
+  .responsive-table td {
+    border: 0px !important;
+    padding: 0.5rem !important;
+  }
+
+  .responsive-table tr {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #727272;
+    padding: 1rem 0 !important;
+  }
+
+  .responsive-table tr:first-child {
+    border-top: 1px solid #acacac;
+  }
+
+  .responsive-table thead {
+    display: none;
+  }
+
+  .responsive-table tr:hover {
+    background-color: white;
+  }
+
+  .responsive-table .m-data-descriptor {
+    display: block;
+  }
+
+  .responsive-table .table-header {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .responsive-table .table-header > * {
+    margin-bottom: 10px;
+  }
+}
 .input-spacing {
   margin-bottom: 5%;
 }

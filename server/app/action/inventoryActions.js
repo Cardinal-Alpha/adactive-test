@@ -3,49 +3,38 @@ import {
     ADD_STORAGE_ITEM,
     REMOVE_STORAGE_ITEM,
 //--> Storage status
-    SUBSCRIBE_STORAGE_SNAPSHOT,
-    UNSUBSCRIBE_STORAGE_SNAPSHOT,
+    SUBSCRIBE_STORAGE,
+    FETCH_STORAGE,
     SET_STORAGE_SEARCHTERM,
-    SET_STORAGE_PAGE,
 //--> Item transaction
     ADD_TRX_ITEMS,
     REMOVE_TRX_ITEMS,
     DO_ITEMS_TRX,
 //-- Transaction log
-    SUBSCRIBE_TRX_SNAPSHOT,
-    UNSUBSCRIBE_TRX_SNAPSHOT,
+    SUBSCRIBE_TRX,
+    FETCH_TRX,
     SET_TRX_RANGE,
-    SET_TRX_PAGE
 } from "../actionTypes"
 
 
 
-export const subscribeStorageSnapshot = (onSnapshot, onFailed)=> ({
-    type: SUBSCRIBE_STORAGE_SNAPSHOT,
+export const subscribeStorage = (onFetch, onFailed)=> ({
+    type: SUBSCRIBE_STORAGE,
     payload:{
-        onSnapshot,
+        onFetch,
         onFailed
     }
 })
 
 
-export const unsubscribeStorageSnapshot = ()=> ({
-    type: UNSUBSCRIBE_STORAGE_SNAPSHOT
+export const fetchStorage = ()=> ({
+    type: FETCH_STORAGE
 })
 
 
 export const setStorageSearchTerm = term=> ({
     type: SET_STORAGE_SEARCHTERM,
     payload: term
-})
-
-
-export const setStoragePage = (page, size)=> ({
-    type: SET_STORAGE_PAGE,
-    payload: {
-        page,
-        size
-    }
 })
 
 
@@ -79,18 +68,18 @@ export const doItemTransaction = (onSuccess, onFailed, type)=> ({
 })
 
 
-export const subscribeTransactionSnapshot = (onSnapshot, onFailed, type)=> ({
-    type: SUBSCRIBE_TRX_SNAPSHOT,
+export const subscribeTransaction = (onFetch, onFailed, type)=> ({
+    type: SUBSCRIBE_TRX,
     payload:{
-        onSnapshot,
+        onFetch,
         onFailed,
         type
     }
 })
 
 
-export const unsubscribeTransactionSnapshot = type=> ({
-    type: UNSUBSCRIBE_TRX_SNAPSHOT,
+export const fetchTransaction = type=> ({
+    type: FETCH_TRX,
     payload: type
 })
 
@@ -100,16 +89,6 @@ export const setTransactionRange = (start, end, type)=> ({
     payload:{
         start,
         end,
-        type
-    }
-})
-
-
-export const setTransactionPage = (page, size, type)=> ({
-    type: SET_TRX_PAGE,
-    payload: {
-        page,
-        size,
         type
     }
 })

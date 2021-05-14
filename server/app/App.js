@@ -4,8 +4,8 @@ import {
     Switch,
     Route
 } from 'react-router-dom'
-import {AuthContext} from "./context"
-import {AuthStore} from "./store"
+import {AuthContext, AppContext} from "./context"
+import {AuthStore, AppStore} from "./store"
 import {Provider} from "react-redux"
 
 import AppContainer from "./component/AppContainer";
@@ -26,6 +26,7 @@ const App = (props)=>{
     if(typeof window != 'undefined'){
 
         return <Provider store={AuthStore} context={AuthContext}>
+                <Provider store={AppStore} context={AppContext}>
                     <Router>
                         <AppContainer >
                             <Switch>
@@ -59,6 +60,7 @@ const App = (props)=>{
                             </Switch>
                         </AppContainer>
                     </Router>
+                </Provider>
                 </Provider>
     }else{
         return <div>Loading...</div>

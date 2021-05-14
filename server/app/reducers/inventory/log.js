@@ -1,8 +1,7 @@
 import {
 //-- Transaction log
-    SUBSCRIBE_TRX_SNAPSHOT,
-    UNSUBSCRIBE_TRX_SNAPSHOT,
-    SET_TRX_PAGE,
+    SUBSCRIBE_TRX,
+    FETCH_TRX,
     SET_TRX_RANGE,
 } from "../../actionTypes"
 
@@ -12,41 +11,31 @@ import {getDefaultFirestore} from "../../firebase/FireApp"
 const initLogsData = {
     logs:{
         in:{
-            page: 1,
-            size: 20,
             range:{
                 start: null,
                 end: null
             },
-            onSnapshot: null,
-            onFailed: null,
-            unsubscriber: null
+            onFetch: null,
+            onFailed: null
         },
         out:{
-            page: 1,
-            size: 20,
             range:{
                 start: null,
                 end: null
             },
-            onSnapshot: null,
-            onFailed: null,
-            unsubscriber: null
+            onFetch: null,
+            onFailed: null
         }
     }
 }
 
 
-const setQueryToLog = (logs, type) => {
+const execQuery = (logs, type) => {
     const db = getDefaultFirestore();
-    const page = logs.page;
-    const size = logs.size;
     const range = logs.range;
-    const onSnap = logs.onSnapshot;
+    const onFetch = logs.onFetch;
     const onFailed = logs.onFailed;
     let query = null;
-    if(logs.unsubscriber)
-        logs.unsubscriber();
     switch (type) {
         case "in":
             query = db.collection('logs/in')
@@ -55,19 +44,18 @@ const setQueryToLog = (logs, type) => {
             query = db.collection('logs/out')
             break;
     }
-    if(page && size && query && onSnap)
-        logs.unsubscriber = query.onSnapshot(
+    if(query && onFetch)
+        query.get().then(
             snapshot=>{
                 const list = snapshot.docs.filter( 
                                             doc=> range.start? doc.data().timestamp >= range.start : true
                                         ).filter(
                                             doc=> range.end? doc.data().timestamp < range.end : true
                                         );
-                const offset = (page-1)*size;
-                if(onSnap)
-                    onSnap( list.slice( offset, offset + size) );
-            },
-            err=>{
+                if(onFetch)
+                    onFetch(list);
+            })
+            .catch(err=>{
                 if(onFailed)
                     onFailed(err);
             })
@@ -104,52 +92,31 @@ const setLogToState = (state, log, type)=>{
 
 
 export const logsReducer = (state = initLogsData, action)=>{
-
-    switch (action.type) {
+    const type = action.payload? action.payload.type : null;
+    const log = getLogFromState(state, type);
+    switch (type) {
         case SET_TRX_RANGE:
-            const log = getLogFromState(state, action.payload.type);
-            const type = action.payload.type;
             if(log){
                 const range = action.payload;
                 delete range.type;
                 log.range = range;
-                return setLogToState(state, setQueryToLog(log, type), type);
+                return setLogToState(state, execQuery(log, type), type);
             }
             return state;
 
 
-        case SET_TRX_PAGE: 
-            const log = getLogFromState(state, action.payload.type);
-            const type = action.payload.type;
+        case SUBSCRIBE_TRX: 
             if(log){
-                log.page = action.payload.page;
-                log.size = action.payload.size;
-                return setLogToState(state, setQueryToLog(log, type), type);
-            }
-            return state;
-
-
-        case SUBSCRIBE_TRX_SNAPSHOT: 
-            const log = getLogFromState(state, action.payload.type);
-            const type = action.payload.type;
-            if(log){
-                log.onSnapshot = action.payload.onSnapshot;
+                log.onFetch = action.payload.onFetch;
                 log.onFailed = action.payload.onFailed;
-                return setLogToState(state, setQueryToLog(log, type), type);
+                return setLogToState(state, log, type);
             }
             return state;
 
 
-        case UNSUBSCRIBE_TRX_SNAPSHOT:
-            const log = getLogFromState(state, action.payload.type);
-            const type = action.payload.type;
+        case FETCH_TRX:
             if(log){
-                if(log.unsubscriber)
-                    log.unsubscriber();
-                log.onSnapshot = null;
-                log.onFailed = null;
-                log.unsubscriber = null;
-                return setLogToState(state, log, type);
+                return setLogToState(state, execQuery(log, type), type);
             }
             return state;
 
