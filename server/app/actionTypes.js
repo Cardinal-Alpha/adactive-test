@@ -19,6 +19,7 @@ export const SET_STORAGE_SEARCHTERM = "SET_STORAGE_SEARCHTERM";
 //--> Item transaction
 export const ADD_TRX_ITEMS = "ADD_TRX_ITEMS";
 export const REMOVE_TRX_ITEMS = "REMOVE_TRX_ITEMS";
+export const UPDATE_TRX_ITEMS = "UPDATE_TRX_ITEMS";
 export const DO_ITEMS_TRX = "DO_ITEMS_TRX";
 //-- Transaction log
 export const SUBSCRIBE_TRX = "SUBSCRIBE_TRX";

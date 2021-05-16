@@ -9,6 +9,7 @@ import {
 //--> Item transaction
     ADD_TRX_ITEMS,
     REMOVE_TRX_ITEMS,
+    UPDATE_TRX_ITEMS,
     DO_ITEMS_TRX,
 //-- Transaction log
     SUBSCRIBE_TRX,
@@ -49,6 +50,17 @@ export const addTransactionItem = (item, qty, note, type)=> ({
 })
 
 
+export const updateTransactionItem = (item, qty, note, type)=> ({
+    type: UPDATE_TRX_ITEMS,
+    payload:{
+        item,
+        qty,
+        note,
+        type
+    }
+})
+
+
 export const removeTransactionItem = (item, type)=> ({
     type: REMOVE_TRX_ITEMS,
     payload: {
@@ -80,7 +92,9 @@ export const subscribeTransaction = (onFetch, onFailed, type)=> ({
 
 export const fetchTransaction = type=> ({
     type: FETCH_TRX,
-    payload: type
+    payload: {
+        type
+    }
 })
 
 

@@ -4,6 +4,7 @@ import {
 //--> Item transaction
     ADD_TRX_ITEMS,
     REMOVE_TRX_ITEMS,
+    UPDATE_TRX_ITEMS,
     DO_ITEMS_TRX
 } from "../../actionTypes"
 
@@ -61,7 +62,7 @@ export const trxReducer = (state = initTrxData, action)=>{
     const type = action.payload? action.payload.type : null;
     const trx = getTrxFromState(state, type);
     const item = action.payload? action.payload.item : null;
-    switch (type) {
+    switch (action.type) {
         case ADD_TRX_ITEMS:
             const note = action.payload.note;
             const qty = action.payload.qty;
@@ -70,6 +71,20 @@ export const trxReducer = (state = initTrxData, action)=>{
 
         case REMOVE_TRX_ITEMS:
             trx.list = trx.list.filter( rec=> rec.item.data().uid != item.data().uid )
+            return setTrxToState(state, trx, type);
+
+        case UPDATE_TRX_ITEMS:
+            const uNote = action.payload.note;
+            const uQty = action.payload.qty;
+            trx.list = trx.list.map( rec=> {
+                if(rec.item.data().uid == item.data().uid)
+                    return {
+                        item,
+                        note: uNote,
+                        qty: uQty
+                    }
+                return rec;
+            })
             return setTrxToState(state, trx, type);
 
         case DO_ITEMS_TRX:
@@ -82,12 +97,12 @@ export const trxReducer = (state = initTrxData, action)=>{
                     let increment = null;
                     switch (type) {
                         case "in":
-                            logColl = db.collection('logs/in')
+                            logColl = db.collection('logs').doc('in').collection('records')
                             increment = rec.qty;
                             break;
     
                         case "out":
-                            logColl = db.collection('logs/out')
+                            logColl = db.collection('logs').doc('out').collection('records')
                             increment = 0 - rec.qty;
                             break;
                     }

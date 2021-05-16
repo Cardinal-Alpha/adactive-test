@@ -38,10 +38,10 @@ const execQuery = (logs, type) => {
     let query = null;
     switch (type) {
         case "in":
-            query = db.collection('logs/in')
+            query = db.collection('logs').doc('in').collection('records')
             break;
         case "out":
-            query = db.collection('logs/out')
+            query = db.collection('logs').doc('out').collection('records')
             break;
     }
     if(query && onFetch)
@@ -94,7 +94,7 @@ const setLogToState = (state, log, type)=>{
 export const logsReducer = (state = initLogsData, action)=>{
     const type = action.payload? action.payload.type : null;
     const log = getLogFromState(state, type);
-    switch (type) {
+    switch (action.type) {
         case SET_TRX_RANGE:
             if(log){
                 const range = action.payload;
