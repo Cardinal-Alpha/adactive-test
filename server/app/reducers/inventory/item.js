@@ -37,7 +37,7 @@ const execQuery = items => {
             if(onFailed)
                 onFailed(err);
         });
-    return items;
+    return {...items};
 }
 
 

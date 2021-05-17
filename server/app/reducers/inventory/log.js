@@ -87,7 +87,7 @@ const setLogToState = (state, log, type)=>{
             state.logs.out = log
             break;
     }
-    return state;
+    return {...state};
 }
 
 

@@ -53,7 +53,7 @@ const setTrxToState = (state, trx, type)=>{
             state.transactions.out = trx
             break;
     }
-    return state;
+    return {...state};
 }
 
 
@@ -70,14 +70,14 @@ export const trxReducer = (state = initTrxData, action)=>{
             return setTrxToState(state, trx, type);
 
         case REMOVE_TRX_ITEMS:
-            trx.list = trx.list.filter( rec=> rec.item.data().uid != item.data().uid )
+            trx.list = trx.list.filter( rec=> rec.item.id != item.id )
             return setTrxToState(state, trx, type);
 
         case UPDATE_TRX_ITEMS:
             const uNote = action.payload.note;
             const uQty = action.payload.qty;
             trx.list = trx.list.map( rec=> {
-                if(rec.item.data().uid == item.data().uid)
+                if(rec.item.id == item.id)
                     return {
                         item,
                         note: uNote,
@@ -91,41 +91,41 @@ export const trxReducer = (state = initTrxData, action)=>{
             const onSuccess = action.payload.onSuccess;
             const onFailed = action.payload.onFailed;
             const db = getDefaultFirestore();
-            db.runTransaction( chain=>{
+            db.runTransaction( async chain=>{
                 trx.list.forEach( rec=>{
-                    let logColl = null;
+                    let logColl = db.collection('logs');
                     let increment = null;
                     switch (type) {
                         case "in":
-                            logColl = db.collection('logs').doc('in').collection('records')
                             increment = rec.qty;
                             break;
     
                         case "out":
-                            logColl = db.collection('logs').doc('out').collection('records')
                             increment = 0 - rec.qty;
                             break;
                     }
                     const item = rec.item;
-                    const newLog = logColl.doc();
-                    chain.update(
-                        item,
-                        {
-                            qty: firebase.firestore.FieldValue.increment(increment),
-                            last_update: firebase.firestore.FieldValue.serverTimestamp()
-                        }
-                    ).set(
-                        newLog,
-                        {
-                            name: rec.item.data().name,
-                            qty: rec.qty,
-                            sum: rec.item.data().price * rec.qty,
-                            note: rec.note,
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                        }
-                    )
+                    logColl.add()
+                    .then( newLog=>{
+                        chain.update(
+                            item.ref,
+                            {
+                                qty: firebase.firestore.FieldValue.increment(increment),
+                                last_update: firebase.firestore.FieldValue.serverTimestamp()
+                            }
+                        ).set(
+                            newLog,
+                            {
+                                name: rec.item.data().name,
+                                qty: rec.qty,
+                                sum: rec.item.data().price * rec.qty,
+                                note: rec.note,
+                                type,
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                            }
+                        )
+                    })
                 })
-                return chain;
             })
             .then(()=>{
                 if(onSuccess)
@@ -137,11 +137,11 @@ export const trxReducer = (state = initTrxData, action)=>{
             })
             switch (type) {
                 case "in":
-                    trx.in.list = []
+                    trx.list = []
                     break;
             
                 case "out":
-                    trx.out.list = []
+                    trx.list = []
                     break;
             }
             return setTrxToState(state, trx, type);
